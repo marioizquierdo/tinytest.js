@@ -1,17 +1,22 @@
 (function(tinytest){
 
+  tinytest.setup = function() {};    // override to execute before each test
+  tinytest.teardown = function() {}; // override to execute after each test
+
   // Name a test case and group some assertions on it
   tinytest.test = function(title, testFunc, report) {
     report || (report = tinytest.report); // use another report to isolate test cases
     try {
+      tinytest.setup(); // execute before each test
       testFunc();
     } catch (err) {
       if (err === 'tinytest failure') {
         report.failures.push(title); // special error used to catch assert failures
       } else {
-        throw err; // test error
+        throw err; // there was an unexpected error
       }
     } finally {
+      tinytest.teardown(); // execute after each test
       report.tests++; // ensure count tests
     }
   };
@@ -26,7 +31,7 @@
     try {
       testFunc();
     } catch (err) {
-      return err; // use the returned error to add assertion on the error object
+      return err; // use the returned error to assert the error object
     }
     tinytest.assert(false); // add a failure if the error was not thrown
   };
