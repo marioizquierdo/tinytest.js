@@ -8,12 +8,13 @@ var Tinytest = (function() {
     // Bind scopes to ensure "this" keeps being "this"
     this.test = __bind(this.test, this);
   }
+  var def = Tinytest.prototype;
 
-  Tinytest.prototype.setup = function() {};    // override to execute before each test
-  Tinytest.prototype.teardown = function() {}; // override to execute after each test
+  def.setup = function() {};    // override to execute before each test
+  def.teardown = function() {}; // override to execute after each test
 
   // Name a test case and group some assertions on it
-  Tinytest.prototype.test = function(title, testFunc) {
+  def.test = function(title, testFunc) {
     try {
       this.setup(); // execute before each test
       testFunc();
@@ -30,18 +31,18 @@ var Tinytest = (function() {
   };
 
   // Check that some expression is true. Use inside a testFunc.
-  Tinytest.prototype.assert = function(expr) {
+  def.assert = function(expr) {
     if (!expr) throw 'tinytest failure';
   };
 
   // Check that a exception is thrown.
-  Tinytest.prototype.assertError = function(testFunc) {
+  def.assertError = function(testFunc) {
     try {
       testFunc();
     } catch (err) {
       return err; // use the returned error to assert the error object
     }
-    Tinytest.prototype.assert(false); // expected error not thrown
+    def.assert(false); // expected error not thrown
   };
 
   return Tinytest;
@@ -53,7 +54,9 @@ var TinytestReport = (function() {
     this.tests = 0;
     this.failures = [];
   }
-  TinytestReport.prototype.toString = function() {
+  var def = TinytestReport.prototype;
+
+  def.toString = function() {
     var str = '';
     for (i in this.failures) str += 'Failure in "' + this.failures[i] + '"\n'; // failure test titles
     str += "" + this.tests + " tests"; // number of tests
@@ -61,7 +64,8 @@ var TinytestReport = (function() {
     str += this.failures.length === 0 ? ' [OK]' : ' [ERROR]'
     return str;
   },
-  TinytestReport.prototype.toHTML = function() {
+
+  def.toHTML = function() {
     return this.toString().replace('\n', '<br/>'); // use BR tags instead of \n line-breaks
   }
   return TinytestReport;
