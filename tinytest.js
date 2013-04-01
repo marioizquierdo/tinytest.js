@@ -30,6 +30,9 @@
       str += "" + this.tests + " tests"; // number of tests
       str += ", " + this.failures.length + " failures"; // number of failures
       return str;
+    },
+    toHTML: function() {
+      return this.toString().replace('\n', '<br/>'); // use BR tags instead of \n line-breaks
     }
   };
 
