@@ -48,6 +48,26 @@ var Tinytest = (function() {
   return Tinytest;
 })();
 
+var TinyTestExpect = (function(){
+  function TinyTestExpect(actual) {
+    this.actual = actual;
+  }
+  var def = TinyTestExpect.prototype;
+
+  def.toBe = function(expected) { return this.actual === expected; };
+  def.toNotBe = function(expected) { return this.actual !== expected; };
+  def.toMatch = function(expected) { return new RegExp(expected).test(this.actual); };
+  def.toNotMatch = function(expected) { return !(new RegExp(expected).test(this.actual)); };
+  def.toBeDefined = function() { return this.actual !== void 0; };
+  def.toBeUndefined = function() { return this.actual === void 0; };
+  def.toBeNull = function() { return (this.actual === null); };
+  def.toBeNaN = function() { return (this.actual !== this.actual); };
+  def.toBeTruthy = function() { return !!this.actual; };
+  def.toBeFalsy = function() { return !this.actual; };
+
+  return TinyTestExpect;
+})();
+
 // Report is used to store failures and print results of a test suite
 var TinytestReport = (function() {
   function TinytestReport() {
