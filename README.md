@@ -9,6 +9,7 @@ That's it, I made it as an exercise to see how smaller could a test framework be
 
  * Implement only must-have functions
  * Avoid any complexity
+ * Tinytest should be able to test tinytest itself
  * Write some tests with it and see if it actually could be used on, at least, small projects
 
 ## Usage ##
