@@ -81,5 +81,9 @@ test('nested test functions with failures', function() {
   assert(report.failures[0] == 'child test 1'); // first assertion to fail is added first in the failures list
 });
 
+test('division by zero should throw an exeption', function(){
+  1 / 0;
+});
+
 
 console.log(tinytest.report.toString());

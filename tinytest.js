@@ -2,7 +2,7 @@
 
   // Name a test case and group some assertions on it
   tinytest.test = function(title, testFunc, report) {
-    report || (report = tinytest.report); // use another report to isolate test suites
+    report || (report = tinytest.report); // use another report to isolate test cases
     try {
       testFunc();
     } catch (err) {
@@ -21,7 +21,21 @@
     if (!expr) throw 'tinytest failure';
   };
 
-  // Generate a new report to be used by tests
+  // Check that a exception is thrown.
+  // Raise the exception in the testFunc, and assert the exception in errorMatchFunc.
+  tinytest.testError = function(title, testFunc, errorMatchFunc, report) {
+    report || (report = tinytest.report); // use another report to isolate test suites
+    var errorThrown = false;
+    try {
+      testFunc();
+    } catch (err) {
+      errorThrown = true;
+      if (errorMatchFunc) errorMatchFunc(err); // use normal assert inside with the error
+    }
+  };
+
+  // Generate a new report to be used by tests.
+  // You normally don't need to use this function, because a default report is generated in tinytest.report
   tinytest.newReport = function() {
     return {
       tests: 0,
