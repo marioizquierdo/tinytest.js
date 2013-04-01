@@ -1,6 +1,7 @@
 // Tinytest is tested with Tinytest °O°
 // Just run this file with node.js and check the output: node test/tinytest_test.js
-require('tinytest')(global);
+
+if (typeof global != 'undefined') require('tinytest')(global); // node.js (CommonJS) only, in a browser just run tinytest.js script before
 var sub; // used as "sub-test", to not interfere with the global tinytest, allows to assert in the sub-test report
 
 tinytest.setup = function() {

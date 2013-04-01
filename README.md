@@ -6,25 +6,22 @@ It's just a personal exercise, to see .
 
 ## Goals ##
 
- * Implement only must-have functions and avoid any complexity
- * Test Tinytest with Tinytest
+ * Avoid anything complex, implement only must-have methods (find the right balance is the challenge).
+ * It should be contained in a small single file, that is easy to read and understand.
+ * Although with small functionality set, it should be easy to use.
+ * Test Tinytest with Tinytest.
 
-## Usage ##
-
-In node.js: see `test/tinytest_test.js` as example.
-In a browser: see `test/browser_example.js` as example.
-
-## Example ##
+## Usage Example ##
 
 ```javascript
-require('tinytest');
+if (typeof global != 'undefined') require('tinytest')(global); // node.js (CommonJS) only, in a browser just run tinytest.js script before
 
 tinytest.setup = function() {
   "executed before each test"
 };
 
 tinytest.teardown = function() {
-  'executed after each test'
+  "executed after each test"
 };
 
 test("my test", function() {
@@ -43,6 +40,8 @@ console.log(tinytest.report.toString()); // print test report
 
 ```
 
+Tinytest is tested with Tinytest, so you can see more usage examples in `test/test.js`
+
 ## What is NOT included ##
 
 Tinytest is really, really tiny. It barely makes it to be a testing framework.
@@ -51,7 +50,7 @@ If there is a failure, it does not show the line. This is because showing the st
 
 Tinytest does not implement any kind of `mock` (`stub`, `double`, etc.). I think that is not in the scope of the "core" functionality of a small testing framework. Include other libraries like `sinon.js` for this purpose.
 
-No formatters were added, and the only way to see the errors is using `tinytest.resport` object. This is enough for most of the cases.
+No formatters were added, and the only way to see the errors is using `tinytest.report` object. This is enough for most of the cases.
 
 ## Important note ##
 

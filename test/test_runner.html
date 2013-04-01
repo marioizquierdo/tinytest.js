@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Tinytest HTML runner</title>
+</head>
+
+<body>
+  <h1>Tinytest test</h1>
+  <p id="report"> running test ... </p>
+
+  <!-- Load tinytest, load test and show result in the document -->
+  <script src="../tinytest.js"></script>
+  <script src="tinytest_test.js"></script>
+  <script>
+    document.getElementById("report").innerHTML = tinytest.report.toHTML();
+  </script>
+</body>
+</html>
