@@ -1,8 +1,9 @@
 // Tinytest is tested with Tinytest °O°
 // Just run this file with node.js and check the output: node test/tinytest_test.js
 var tinytest = require('tinytest');
-var test   = tinytest.test;
-var assert = tinytest.assert;
+var test        = tinytest.test;
+var assert      = tinytest.assert;
+var assertError = tinytest.assertError;
 var report;
 
 test('single assert with true expression', function() {
@@ -81,9 +82,46 @@ test('nested test functions with failures', function() {
   assert(report.failures[0] == 'child test 1'); // first assertion to fail is added first in the failures list
 });
 
-test('division by zero should throw an exeption', function(){
-  1 / 0;
+test('assertError should not fail if an error is raised inside', function() {
+  report = tinytest.newReport();
+  test('should throw an exeption', function(){
+    assertError(function() {
+      throw new Error('kaa'); // throw an Error
+    });
+  }, report);
+  test('should throw an exeption', function(){
+    assertError(function() {
+      throw 'kaa'; // throw a String
+    });
+  }, report);
+
+  assert(report.tests === 2);
+  assert(report.failures.length === 0); // no failures
+})
+
+test('assertError should add a failure if no error was raised inside', function() {
+  report = tinytest.newReport();
+  test('should throw an exeption', function(){
+    assertError(function() {
+      // stuff but no errors
+    });
+  }, report);
+
+  assert(report.tests === 1);
+  assert(report.failures.length === 1); // no error was raised
 });
 
+test('assertError should return the raised error', function() {
+  report = tinytest.newReport();
+  test('should throw a "not my problem" exception', function() {
+    var err = assertError(function() {
+      throw "not my problem";
+    });
+    assert(err === "not my problem"); // use this error to add more asserts
+  }, report);
+
+  assert(report.tests === 1);
+  assert(report.failures.length === 0);
+});
 
 console.log(tinytest.report.toString());

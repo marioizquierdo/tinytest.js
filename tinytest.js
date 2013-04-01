@@ -6,10 +6,10 @@
     try {
       testFunc();
     } catch (err) {
-      if (err == 'tinytest failure') {
+      if (err === 'tinytest failure') {
         report.failures.push(title); // special error used to catch assert failures
       } else {
-        throw err; // errors are easily debbuged if we just raise them
+        throw err; // test error
       }
     } finally {
       report.tests++; // ensure count tests
@@ -22,16 +22,13 @@
   };
 
   // Check that a exception is thrown.
-  // Raise the exception in the testFunc, and assert the exception in errorMatchFunc.
-  tinytest.testError = function(title, testFunc, errorMatchFunc, report) {
-    report || (report = tinytest.report); // use another report to isolate test suites
-    var errorThrown = false;
+  tinytest.assertError = function(testFunc) {
     try {
       testFunc();
     } catch (err) {
-      errorThrown = true;
-      if (errorMatchFunc) errorMatchFunc(err); // use normal assert inside with the error
+      return err; // use the returned error to add assertion on the error object
     }
+    tinytest.assert(false); // add a failure if the error was not thrown
   };
 
   // Generate a new report to be used by tests.
@@ -45,7 +42,7 @@
         for (i in this.failures) str += 'Failure in "' + this.failures[i] + '"\n'; // failure test titles
         str += "" + this.tests + " tests"; // number of tests
         str += ", " + this.failures.length + " failures"; // number of failures
-        str += this.failures.length == 0 ? ' [OK]' : ' [ERROR]'
+        str += this.failures.length === 0 ? ' [OK]' : ' [ERROR]'
         return str;
       },
       toHTML: function() {

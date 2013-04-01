@@ -26,6 +26,13 @@ test("my test", function() {
   assert(expression); // check if expression is evaluated to true
 });
 
+test("should raise an exception", function() {
+  var error = assertError(function() { // assertError fails if no error was thrown
+    throw 'myerror';
+  });
+  assert(error === 'myerror'); // additional assertions on the error
+});
+
 ```
 
 ## What is not included ##
