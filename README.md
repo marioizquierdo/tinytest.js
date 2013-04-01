@@ -20,6 +20,15 @@ In a browser: see `test/browser_example.js` as example.
 ## Example ##
 
 ```javascript
+require('tinytest');
+
+tinytest.setup = function() {
+  "executed before each test"
+};
+
+tinytest.teardown = function() {
+  'executed after each test'
+};
 
 test("my test", function() {
   expression = true;
@@ -32,6 +41,8 @@ test("should raise an exception", function() {
   });
   assert(error === 'myerror'); // additional assertions on the error
 });
+
+console.log(tinytest.report.toString()); // print test report
 
 ```
 

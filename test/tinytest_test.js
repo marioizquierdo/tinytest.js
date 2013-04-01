@@ -1,11 +1,7 @@
 // Tinytest is tested with Tinytest °O°
 // Just run this file with node.js and check the output: node test/tinytest_test.js
-var Tinytest = require('tinytest');
-var tinytest = new Tinytest();
-var test        = tinytest.test;
-var assert      = tinytest.assert;
-var assertError = tinytest.assertError;
-var sub; // test to be tested
+require('tinytest')(global);
+var sub; // used as "sub-test", to not interfere with the global tinytest, allows to assert in the sub-test report
 
 tinytest.setup = function() {
   sub = new Tinytest();

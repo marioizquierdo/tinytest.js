@@ -1,8 +1,12 @@
-// Example of tinytest on a browser
+// Example of tinytest on a browser.
+// Be sure to include the tinytest.js script before this one
 
-// Alias methods
-test = tinytest.test;
-assert = tinytest.assert;
+tinytest.setup = function() {
+  'executed before each test'
+}
+tinytest.teardown = function() {
+  'executed after each test'
+}
 
 // Test case
 test("one is one", function() {

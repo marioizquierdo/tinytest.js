@@ -67,8 +67,21 @@ var TinytestReport = (function() {
   return TinytestReport;
 })();
 
+// Method to populate the global namespace with test functions.
+// This is OK for a testing framework, because the test is the main file
+var defineGlobalTest = function(context) {
+  context.Tinytest    = Tinytest;
+  context.tinytest    = new Tinytest();
+  context.test        = context.tinytest.test;
+  context.assert      = context.tinytest.assert;
+  context.assertError = context.tinytest.assertError;
+}
+
+// browser (non CommonJS environment)
 if (typeof exports === 'undefined') {
-  window.Tinytest = Tinytest; // browser
+  defineGlobalTest(window);
+
+// node.js/require.js (with CommonJS)
 } else {
-  module.exports = Tinytest; // node.js (require)
+  module.exports = defineGlobalTest; // require('tinytest')(this)
 }
