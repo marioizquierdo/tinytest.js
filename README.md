@@ -40,7 +40,14 @@ test("my test", function() {
   expect(0).toBeFalsy();
 });
 
-console.log(tinytest.report.toString()); // print test report
+test("error stuff", function() {
+  var foo = function() { return nonexistingvariable + 1; } // throws an error
+  var error = expect(foo).toThrowError(); // get error to add more assertions on it
+  expect(error.message).toBe('nonexistingvariable is not defined'); // ensure the error is the one we want
+});
+
+// Print test report
+console.log(tinytest.report.toString());
 ```
 
 Tinytest is tested with Tinytest, so you can see more usage examples in `test/test.js`
