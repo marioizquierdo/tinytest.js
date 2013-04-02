@@ -9,27 +9,25 @@ tinytest.setup = function() {
 }
 
 test('single assert with true expression', function() {
-  sub.test('true', function() { assert(true) });
-  sub.test('one is one', function(){ assert(1 === 1); });
+  sub.test('true', function() { assert(true); });
+  sub.test('one is one', function(){ expect(1).toBe(1); });
 
-  assert(sub.report.tests === 2);
-  assert(sub.report.failures.length === 0);
+  expect(sub.report.tests).toBe(2);
+  expect(sub.report.failures.length).toBe(0);
 });
 
 test('single assert with false expression', function() {
   sub.test('false', function() { assert(false) });
   sub.test('one is two', function() { assert(1 === 2) });
 
-  assert(sub.report.tests === 2);
-  assert(sub.report.failures.length === 2);
+  expect(sub.report.tests).toBe(2);
+  expect(sub.report.failures.length).toBe(2);
 });
 
 test('failure is the test title', function() {
-  sub.test('test title', function() {
-    assert(false);
-  });
+  sub.test('test title', function() { assert(false); });
 
-  assert(sub.report.failures[0] == 'test title');
+  expect(sub.report.failures[0].testTitle).toBe('test title');
 });
 
 test('multiple asserts in the same test', function() {
@@ -38,8 +36,8 @@ test('multiple asserts in the same test', function() {
     assert(true);
   });
 
-  assert(sub.report.tests === 1); // multiple asserts count just like one test
-  assert(sub.report.failures.length === 0);
+  expect(sub.report.tests).toBe(1); // multiple asserts count just like one test
+  expect(sub.report.failures.length).toBe(0);
 });
 
 test('multiple asserts in the same test, one assert fails', function() {
@@ -49,9 +47,9 @@ test('multiple asserts in the same test, one assert fails', function() {
     assert(true);
   });
 
-  assert(sub.report.tests === 1);
-  assert(sub.report.failures.length === 1);
-  assert(sub.report.failures[0], 'with two asserts inside');
+  expect(sub.report.tests).toBe(1);
+  expect(sub.report.failures.length).toBe(1);
+  expect(sub.report.failures[0].testTitle).toBe('with two asserts inside');
 });
 
 test('nested test functions with no failures', function() {
@@ -61,8 +59,8 @@ test('nested test functions with no failures', function() {
     assert(true);
   });
 
-  assert(sub.report.tests === 3); // it counts root and nested tests
-  assert(sub.report.failures.length === 0); // no failures
+  expect(sub.report.tests).toBe(3); // it counts root and nested tests
+  expect(sub.report.failures.length).toBe(0); // no failures
 });
 
 test('nested test functions with failures', function() {
@@ -72,78 +70,39 @@ test('nested test functions with failures', function() {
     assert(false);
   });
 
-  assert(sub.report.tests === 3); // it counts root and nested tests
-  assert(sub.report.failures.length === 3); // no failures
-  assert(sub.report.failures[0] == 'child test 1'); // first assertion to fail is added first in the failures list
-});
-
-test('assertError should not fail if an error is raised inside', function() {
-  sub.test('should throw an exeption', function(){
-    assertError(function() {
-      throw new Error('kaa'); // throw an Error
-    });
-  });
-  sub.test('should throw an exeption', function(){
-    assertError(function() {
-      throw 'kaa'; // throw a String
-    });
-  });
-
-  assert(sub.report.tests === 2);
-  assert(sub.report.failures.length === 0); // no failures
-})
-
-test('assertError should add a failure if no error was raised inside', function() {
-  sub.test('should throw an exeption', function(){
-    assertError(function() {
-      // stuff but no errors
-    });
-  });
-
-  assert(sub.report.tests === 1);
-  assert(sub.report.failures.length === 1); // no error was raised
-});
-
-test('assertError should return the raised error', function() {
-  sub.test('should throw a "not my problem" exception', function() {
-    var err = assertError(function() {
-      throw "not my problem";
-    });
-    assert(err === "not my problem"); // use this error to add more asserts
-  });
-
-  assert(sub.report.tests === 1);
-  assert(sub.report.failures.length === 0);
+  expect(sub.report.tests).toBe(3); // it counts root and nested tests
+  expect(sub.report.failures.length).toBe(3); // no failures
+  expect(sub.report.failures[0].testTitle).toBe('child test 1'); // first assertion to fail is added first in the failures list
 });
 
 test('setup is called on each test case', function() {
   var counter = 0;
   sub.setup = function() { counter ++; }
   sub.test('counter plus', function(){
-    assert(counter === 1);
+    expect(counter).toBe(1);
   });
   sub.test('counter plus', function(){
-    assert(counter === 2);
+    expect(counter).toBe(2);
   });
 
-  assert(sub.report.tests === 2);
-  assert(sub.report.failures.length === 0);
-  assert(counter === 2);
+  expect(sub.report.tests).toBe(2);
+  expect(sub.report.failures.length).toBe(0);
+  expect(counter).toBe(2);
 });
 
 test('teardown is called after each test case', function() {
   var counter = 0;
   sub.teardown = function() { counter ++; }
   sub.test('counter plus', function(){
-    assert(counter === 0); // teardown still not called
+    expect(counter).toBe(0); // teardown still not called
   });
   sub.test('counter plus', function(){
-    assert(counter === 1);
+    expect(counter).toBe(1);
   });
 
-  assert(sub.report.tests === 2);
-  assert(sub.report.failures.length === 0);
-  assert(counter === 2);
+  expect(sub.report.tests).toBe(2);
+  expect(sub.report.failures.length).toBe(0);
+  expect(counter).toBe(2);
 })
 
 console.log(tinytest.report.toString());

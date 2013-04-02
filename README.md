@@ -9,7 +9,9 @@ It's just a personal exercise, to see .
  * Avoid anything complex, implement only must-have methods (find the right balance is the challenge).
  * It should be contained in a small single file, that is easy to read and understand.
  * Although with small functionality set, it should be easy to use.
- * No dependencies, all library is coded in plain JavaScript (Note: I wouldn't force this in a real proejct)
+ * All home-made. If something becomes too complex, it should be removed and ported to another library.
+ * Crossbrowser: it should be tiny, but also work everywhere.
+ * It should play nice with other libraries and be easily extensible.
  * Test Tinytest with Tinytest.
 
 ## Usage Example ##
@@ -26,19 +28,19 @@ tinytest.teardown = function() {
 };
 
 test("my test", function() {
-  expression = true;
-  assert(expression); // check if expression is evaluated to true
-});
-
-test("should raise an exception", function() {
-  var error = assertError(function() { // assertError fails if no error was thrown
-    throw 'myerror';
-  });
-  assert(error === 'myerror'); // additional assertions on the error
+  expect(1).toBe(1);
+  expect(1).toNotBe(2);
+  expect('hello world').toMatch(/hello/);
+  expect('hello world').toNotMatch(/kitty/);
+  expect(foo).toBeDefined();
+  expect(unfoo).toBeUndefined();
+  expect(null).toBeNull();
+  expect(NaN).toBeNaN();
+  expect('I am true').toBeTruthy();
+  expect(0).toBeFalsy();
 });
 
 console.log(tinytest.report.toString()); // print test report
-
 ```
 
 Tinytest is tested with Tinytest, so you can see more usage examples in `test/test.js`
@@ -60,18 +62,21 @@ Tinytest does not implement any kind of `mock`, `stub`, `double`, etc.). I think
 
 No formatters were added, and the only way to see the errors is using `tinytest.report` object. This is enough for most of the cases.
 
-#### assert(boolean) to rule them all ####
+#### assert(expression) to rule them all ####
 
-The only assert methods are `assert` and `assertError`. I think this is enough to cach all expected logic and expected exceptions.
+At first I only implemented `assert` and `assertError`.
+I though that should be enough to cach all expected logic and exceptions.
 And they are, but when something fails, there is no information at all about what happened.
 
-I think adding support for different kind of asserts (equals, gt, lt, etc.) would be easy, it would not add much extra complexity, and the failure reports would be much more easy to understad.
+As Einstain once said: "Everything Should Be Made as Simple as Possible, But Not Simpler".
+
+So I changed the "assert" approach to a "expect(x).toBe(x)" approach. It didn't add much more complexity to the code and the result is way better.
 
 ```javascript
 
-assert(x == y); // failure will just tell you something went wrong
+assert(x == y); // failure will just tell you something went wrong, but you don't know what.
 
-assertEquals(x, y); // failure can explain what went wrong, for example "expected 'x' found 'y'"
+expect(x).toBe(y); // failure report says: "expected 1 toBe 2", that gives a lot more information about the problem.
 
 ```
 
