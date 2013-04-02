@@ -54,7 +54,7 @@ Tinytest.prettyPrint = function(obj) {
 // Used by the function expect
 var TinyTestExpect = (function(){
   var matchers, i;
-  matchers = ['toBe', 'toNotBe', 'toMatch', 'toNotMatch', 'toBeDefined', 'toBeUndefined', 'toBeNull', 'toBeNaN', 'toBeTruthy', 'toBeFalsy', 'toThrowError']
+  matchers = ['toBe', 'toNotBe', 'toMatch', 'toNotMatch', 'toBeDefined', 'toBeUndefined', 'toBeNull', 'toNotBeNull', 'toBeNaN', 'toBeTruthy', 'toBeFalsy', 'toThrowError']
 
   function TinyTestExpect(actual) {
     this.actual = actual;
@@ -93,6 +93,7 @@ var TinyTestExpect = (function(){
   def._toBeDefined = function()        { return this.actual !== void 0; };
   def._toBeUndefined = function()      { return this.actual === void 0; };
   def._toBeNull = function()           { return (this.actual === null); };
+  def._toNotBeNull = function()        { return (this.actual !== null); };
   def._toBeNaN = function()            { return (this.actual !== this.actual); };
   def._toBeTruthy = function()         { return !!this.actual; };
   def._toBeFalsy = function()          { return !this.actual; };

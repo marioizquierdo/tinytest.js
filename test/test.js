@@ -75,6 +75,47 @@ test('nested test functions with failures', function() {
   expect(sub.report.failures[0].testTitle).toBe('child test 1'); // first assertion to fail is added first in the failures list
 });
 
+test("The 'toBe' matcher compares with ===", function() {
+  var a = 12;
+  var b = a;
+  expect(a).toBe(b);
+  expect(a).toNotBe(null);
+});
+
+test("The 'toMatch' matcher is for regular expressions", function() {
+  var message = 'foo bar baz';
+
+  expect(message).toMatch(/bar/);
+  expect(message).toMatch('bar');
+  expect(message).toNotMatch(/quux/);
+});
+
+test("The 'toBeDefined' matcher compares against `undefined`", function() {
+  var a = {
+    foo: 'foo'
+  };
+  expect(a.foo).toBeDefined();
+  expect(a.bar).toBeUndefined();
+});
+
+test("The 'toBeNull' matcher compares against null", function() {
+  var a = null;
+  var foo = 'foo';
+  expect(null).toBeNull();
+  expect(a).toBeNull();
+  expect(foo).toNotBeNull();
+});
+
+test("The 'toBeTruthy' matcher is for boolean casting testing", function() {
+  var foo = 'foo';
+  expect(foo).toBeTruthy();
+});
+
+test("The 'toBeFalsy' matcher is for boolean casting testing", function() {
+  var a;
+  expect(a).toBeFalsy();
+});
+
 test('setup is called on each test case', function() {
   var counter = 0;
   sub.setup = function() { counter ++; }
