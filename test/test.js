@@ -116,6 +116,22 @@ test("The 'toBeFalsy' matcher is for boolean casting testing", function() {
   expect(a).toBeFalsy();
 });
 
+test("The 'toThrowError' matcher is for testing if a function throws an exception", function() {
+  var foo = function() { return nonexistingvariable + 1; } // raises an error
+  var error = expect(foo).toThrowError(); // save error to add more assertions on it
+  expect(error.message).toBe('nonexistingvariable is not defined');
+});
+
+test("The 'toThrowError' matcher fails if the exception is not thrown", function() {
+  var foo = function() { return 1 + 2; }; // no error raised
+  sub.test('foo should thow an error', function() {
+    expect(foo).toThrowError(); // this should fail
+  });
+  expect(sub.report.tests).toBe(1);
+  expect(sub.report.failures.length).toBe(1);
+  expect(sub.report.failures[0].reason).toBe("expected function toThrowError");
+});
+
 test('setup is called on each test case', function() {
   var counter = 0;
   sub.setup = function() { counter ++; }

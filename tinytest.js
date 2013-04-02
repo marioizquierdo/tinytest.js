@@ -43,6 +43,8 @@ var Tinytest = (function() {
 Tinytest.prettyPrint = function(obj) {
   if (typeof obj === 'object') {
     return typeof JSON !== 'undefined' ? JSON.stringify(obj) : ""+obj; // show objects as JSON (if JSON lib is available)
+  } else if (typeof obj === 'function') {
+    return 'function';
   } else if (typeof obj === 'string') {
     return '"' + obj + '"'; // show strings with quotes
   } else {
@@ -75,12 +77,14 @@ var TinyTestExpect = (function(){
     (function() { // use closure to keep the matcher variable inside the method implementation
       var matcher = matchers[i];
       def[matcher] = function(expected) {
-        if (!this['_' + matcher](expected)) { // use matcher conditionals (_toBe, _toMatch, _toBeUndefined) to get true or false
+        var condition = this['_' + matcher](expected);
+        if (!condition) { // use matcher conditionals (_toBe, _toMatch, _toBeUndefined) to get true or false
           err = new Error('tinytest failure');
           err.reason = "expected " + Tinytest.prettyPrint(this.actual) + " " + matcher
           if (expected !== void 0) err.reason += " " + Tinytest.prettyPrint(expected)
           throw err; // that will be catched by Tinytest#test method
         }
+        return condition; // _toThrowError also returns the thrown error
       };
     })()
   }
